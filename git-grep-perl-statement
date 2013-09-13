@@ -82,7 +82,10 @@ for my $file (@files) {
 
     for (@found) {
         if (-t STDOUT) {
-            say colored(['bold'], "@{[ $file ]}:@{[ $_->line_number ]}");
+            say colored(
+                ['bold'],
+                "@{[ $file ]}:@{[ $_->line_number ]}"
+            );
             say $finder->highlight($_);
         } else {
             say "@{[ $file ]}:@{[ $_->line_number ]}";
