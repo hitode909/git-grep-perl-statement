@@ -69,7 +69,7 @@ package StatementFinder {
 my $word = (@ARGV)[0];
 
 unless (defined $word) {
-    say "USAGE: git grep-per-statement <pattern> <pathspec>";
+    say "USAGE: git grep-per-statement <pattern token> <pathspec>";
     exit 1;
 }
 
