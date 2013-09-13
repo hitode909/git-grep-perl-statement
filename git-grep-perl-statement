@@ -1,0 +1,93 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use PPI;
+use Perl6::Say;
+use Term::ANSIColor;
+
+package StatementFinder {
+    use strict;
+    use warnings;
+    use PPI;
+    use List::MoreUtils qw(any);
+    use Term::ANSIColor;
+
+    sub new {
+        my ($class, $word) = @_;
+        bless {
+            word => $word,
+            docs => [],
+        }, $class;
+    }
+
+    sub word {
+        my ($self) = @_;
+        $self->{word};
+    }
+
+    sub search {
+        my ($self, $file) = @_;
+
+        my $doc = PPI::Document->new($file);
+        return unless $doc;
+        push @{$self->{docs}}, $doc;
+
+        my $statements = $doc->find('PPI::Statement');
+
+        grep {
+            my $tokens = [ $_->children ];
+
+            any {
+                $_ eq $self->word;
+            } @$tokens;
+        } @$statements;
+    }
+
+    sub flush {
+        my ($self) = @_;
+        $self->{docs} = [];
+    }
+
+    sub highlight_style {
+        ['red'];
+    }
+
+    sub highlight {
+        my ($self, $statement) = @_;
+
+        join '', map {
+            if ($_ eq $self->word) {
+                colored($self->highlight_style, $_);
+            } else {
+                $_;
+            }
+        } $statement->children;
+    }
+};
+
+my $word = (@ARGV)[0];
+
+unless (defined $word) {
+    say "USAGE: git grep-per-statement <pattern> <pathspec>";
+    exit 1;
+}
+
+my @files = split "\n", `git grep --name-only @ARGV`;
+
+my $finder = StatementFinder->new($word);
+
+for my $file (@files) {
+    my @found = $finder->search($file);
+
+    for (@found) {
+        if (-t STDOUT) {
+            say colored(['bold'], "@{[ $file ]}:@{[ $_->line_number ]}");
+            say $finder->highlight($_);
+        } else {
+            say "@{[ $file ]}:@{[ $_->line_number ]}";
+            say $_;
+        }
+    }
+    $finder->flush;
+}
