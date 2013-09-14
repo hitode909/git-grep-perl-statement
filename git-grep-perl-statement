@@ -2,8 +2,8 @@
 
 use strict;
 use warnings;
-use PPI;
-use Perl6::Say;
+
+use 5.014000;
 use Term::ANSIColor;
 
 package StatementFinder {
