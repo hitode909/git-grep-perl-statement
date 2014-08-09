@@ -1,28 +1,26 @@
-git-grep-perl-statement
-=======================
+# NAME
 
-git-grep-perl-statement - Perl statement finder
+App::GitGrepPerlStatement - Perl statement finder
 
-git-grep-perl-statement searches source code by specified token, and print the matched whole statement.
-This is useful when finding multiline method calling, or finding method definition.
+# SYNOPSIS
 
-Install
-=======
+    use App::GitGrepPerlStatement;
 
-```
-cpanm --installdeps .
-```
+# DESCRIPTION
 
-Examples
-========
+App::GitGrepPerlStatement is the frontend of [git-grep-perl-statement](https://metacpan.org/pod/git-grep-perl-statement)
 
-```
-% git grep-perl-statement colored
-git-grep-perl-statement:61
-colored($self->highlight_style, $_);
-git-grep-perl-statement:85
-say colored(
-                ['bold'],
-                "@{[ $file ]}:@{[ $_->line_number ]}"
-            );
-```
+# SEE ALSO
+
+[git-grep-perl-statement](https://metacpan.org/pod/git-grep-perl-statement)
+
+# LICENSE
+
+Copyright (C) hitode909.
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+# AUTHOR
+
+hitode909 <hitode909@gmail.com>

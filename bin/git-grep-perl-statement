@@ -1,0 +1,37 @@
+#!perl
+
+use strict;
+use warnings;
+
+use 5.014000;
+
+use App::GitGrepPerlStatement;
+
+my $word = (@ARGV)[0];
+
+unless (defined $word) {
+    say "USAGE: git grep-per-statement <pattern token> <pathspec>";
+    exit 1;
+}
+
+my @files = split "\n", `git grep --name-only @ARGV`;
+
+my $finder = StatementFinder->new($word);
+
+for my $file (@files) {
+    my @found = $finder->search($file);
+
+    for (@found) {
+        if (-t STDOUT) {
+            say colored(
+                ['bold'],
+                "@{[ $file ]}:@{[ $_->line_number ]}"
+            );
+            say $finder->highlight($_);
+        } else {
+            say "@{[ $file ]}:@{[ $_->line_number ]}";
+            say $_;
+        }
+    }
+    $finder->flush;
+}
