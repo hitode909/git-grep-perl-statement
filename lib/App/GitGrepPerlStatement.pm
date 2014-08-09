@@ -2,65 +2,45 @@ package App::GitGrepPerlStatement;
 use 5.014000;
 use strict;
 use warnings;
-use PPI;
-use List::MoreUtils qw(any);
-use Term::ANSIColor;
+use App::GitGrepPerlStatement::StatementFinder;
+use Term::ANSIColor qw(colored);
 
 our $VERSION = "0.01";
 
-sub new {
-    my ($class, $word) = @_;
-    bless {
-        word => $word,
-        docs => [],
-    }, $class;
-}
+sub run {
+    my ($class, @argv) = @_;
 
-sub word {
-    my ($self) = @_;
-    $self->{word};
-}
+    my $word = (@argv)[0];
 
-sub search {
-    my ($self, $file) = @_;
+    unless (defined $word) {
+        say "USAGE: git grep-per-statement <pattern token> <pathspec>";
+        exit 1;
+    }
 
-    my $doc = PPI::Document->new($file);
-    return unless $doc;
-    push @{$self->{docs}}, $doc;
+    my @files = split "\n", `git grep --name-only @argv`;
 
-    my $statements = $doc->find('PPI::Statement');
+    my $finder = App::GitGrepPerlStatement::StatementFinder->new($word);
 
-    grep {
-        my $tokens = [ $_->children ];
+    for my $file (@files) {
+        my @found = $finder->search($file);
 
-        any {
-            $_ eq $self->word;
-        } @$tokens;
-    } @$statements;
-}
-
-sub flush {
-    my ($self) = @_;
-    $self->{docs} = [];
-}
-
-sub highlight_style {
-    ['red'];
-}
-
-sub highlight {
-    my ($self, $statement) = @_;
-
-    join '', map {
-        if ($_ eq $self->word) {
-            colored($self->highlight_style, $_);
-        } else {
-            $_;
+        for (@found) {
+            if (-t STDOUT) {
+                say colored(
+                    ['bold'],
+                    "@{[ $file ]}:@{[ $_->line_number ]}"
+                );
+                say $finder->highlight($_);
+            } else {
+                say "@{[ $file ]}:@{[ $_->line_number ]}";
+                say $_;
+            }
         }
-    } $statement->children;
+        $finder->flush;
+    }
+
 }
 
-1;
 __END__
 
 =encoding utf-8
