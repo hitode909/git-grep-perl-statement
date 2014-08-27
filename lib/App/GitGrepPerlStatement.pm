@@ -17,7 +17,7 @@ sub run {
         exit 1;
     }
 
-    my @files = split "\n", `git grep --name-only @argv`;
+    my @files = split "\n", `git grep --name-only --cached --word-regexp @{[ quotemeta(join ' ', @argv) ]}`;
 
     my $finder = App::GitGrepPerlStatement::StatementFinder->new($word);
 
