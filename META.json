@@ -67,7 +67,7 @@
          "web" : "https://github.com/hitode909/git-grep-perl-statement"
       }
    },
-   "version" : "0.02",
+   "version" : "0.03",
    "x_contributors" : [
       "Syohei YOSHIDA <syohex@gmail.com>",
       "hitode909 <hitode909@gmail.com>"
