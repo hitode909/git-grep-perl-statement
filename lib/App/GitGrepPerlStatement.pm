@@ -5,7 +5,7 @@ use warnings;
 use App::GitGrepPerlStatement::StatementFinder;
 use Term::ANSIColor qw(colored);
 
-our $VERSION = "0.03";
+our $VERSION = "0.04";
 
 sub run {
     my ($class, @argv) = @_;

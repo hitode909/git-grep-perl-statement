@@ -2,6 +2,9 @@ Revision history for Perl extension App-GitGrepPerlStatement
 
 {{$NEXT}}
 
+0.04 2014-08-28T02:23:47Z
+    - Fix quote
+
 0.03 2014-08-28T01:31:33Z
     - Fix regexp
 
