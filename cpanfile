@@ -1,4 +1,4 @@
-requires 'perl', '5.014000';
+requires 'perl', '5.008001';
 requires 'Term::ANSIColor';
 requires 'List::MoreUtils';
 requires 'PPI';

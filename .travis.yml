@@ -1,5 +1,6 @@
 language: perl
 perl:
+  - 5.8
   - 5.12
   - 5.14
   - 5.16
