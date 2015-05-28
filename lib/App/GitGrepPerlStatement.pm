@@ -5,7 +5,7 @@ use warnings;
 use App::GitGrepPerlStatement::StatementFinder;
 use Term::ANSIColor qw(colored);
 
-our $VERSION = "0.04";
+our $VERSION = "0.05";
 
 sub say ($) {
     my ($message) = @_;
