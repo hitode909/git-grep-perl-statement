@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/hitode909/git-grep-perl-statement.svg?branch=master)](https://travis-ci.org/hitode909/git-grep-perl-statement)
 # NAME
 
 App::GitGrepPerlStatement - Perl statement finder
